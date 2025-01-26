@@ -20,15 +20,17 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); // Soft ambient ligh
 scene.add(ambientLight);
 
 // Add Static Plane
-const plane = createPlane();
+const { plane, material } = createPlane();
 scene.add(plane);
+
+const textureSpeed = -0.001; 
 
 // Add Lines
 const lines = createLines();
 scene.add(lines);
 
 // Add Ball with PNG texture
-const ball = createBall('./public/images/ball-texture.png'); // Use PNG texture for the ball
+const ball = createBall('./public/images/texture.png'); // Use PNG texture for the ball
 scene.add(ball);
 
 // Define 5 segments (X positions for ball and cube)
@@ -105,9 +107,11 @@ function animate() {
   // Rotate the ball slightly to simulate rolling
   ball.rotation.x -= 0.05; // Continuous forward rotation
 
+  material.map.offset.y -= textureSpeed;
+
   // Move the cube forward and handle collision
   if (cube) {
-    cube.position.z += 0.1;
+    cube.position.z += 0.101;
 
     // Check for collision with the ball
     if (checkCollision()) {
@@ -124,6 +128,8 @@ function animate() {
       spawnCube(); // Spawn a new cube
     }
   }
+
+  //plane.position.z += 0.1;
 
   renderer.render(scene, camera);
 }

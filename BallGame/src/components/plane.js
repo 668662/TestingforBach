@@ -1,11 +1,29 @@
 import * as THREE from 'three';
 
 export function createPlane() {
-  const planeGeometry = new THREE.PlaneGeometry(10, 100, 32, 32);
-  const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x4b0082 }); // Dark purple
+  // Create the texture loader
+  const textureLoader = new THREE.TextureLoader();
+  const planeTexture = textureLoader.load('../public/images/road.png'); // Replace with your image path
+
+  // Set texture properties to lay it flat on the plane
+  planeTexture.wrapS = THREE.RepeatWrapping; // Repeat horizontally
+  planeTexture.wrapT = THREE.RepeatWrapping; // Repeat vertically
+  planeTexture.repeat.set(1, 1); // Repeat texture once along each axis
+
+  // Create the plane material using the texture
+  const planeMaterial = new THREE.MeshStandardMaterial({
+    map: planeTexture, // Apply the texture to the material
+  });
+
+  // Create the plane geometry
+  const planeGeometry = new THREE.PlaneGeometry(10, 100, 32, 32); // Adjust size as needed
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane.rotation.x = -Math.PI / 2; // Make it flat
-  return plane;
+
+  // Optionally, rotate the plane to align it with the scene's ground (if needed)
+  plane.rotation.x = -Math.PI / 2;  // Rotate the plane to lie flat on the x-z plane
+
+  // Return the plane object
+  return { plane, material: planeMaterial };
 }
 
 export function createLines() {
