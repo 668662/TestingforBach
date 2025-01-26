@@ -1,8 +1,14 @@
-body {
+html, body {
   margin: 0;
-  overflow: hidden;
+  padding: 0;
+  overflow: hidden; /* Prevent scrollbars */
+  height: 100%; /* Ensure full height */
+  width: 100%; /* Ensure full width */
 }
 
 canvas {
-  display: block;
+  display: block; /* Remove any inline spacing or gaps */
+  position: fixed; /* Ensure it stays fixed to the viewport */
+  top: 0;
+  left: 0;
 }

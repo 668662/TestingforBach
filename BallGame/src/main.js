@@ -3,10 +3,12 @@ import { createPlane, createLines } from './components/plane.js';
 import { createBall } from './components/ball.js';
 
 // Scene, Camera, Renderer
+const width = document.documentElement.clientWidth;
+const height = document.documentElement.clientHeight;
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(width, height);
 document.body.appendChild(renderer.domElement);
 
 // Lighting
@@ -61,6 +63,26 @@ window.addEventListener('keydown', (event) => {
   }
 });
 
+// Game variables
+let playerScore = 0;
+// Create player Score display dynamically
+const scoreDisplay = document.createElement('div');
+scoreDisplay.id = 'score-display';
+scoreDisplay.style.position = 'fixed';
+scoreDisplay.style.top = '10px';
+scoreDisplay.style.left = '10px';
+scoreDisplay.style.color = 'white';
+scoreDisplay.style.fontSize = '24px';
+scoreDisplay.style.zIndex = '1000';
+scoreDisplay.innerHTML = `Score: ${playerScore}`;
+document.body.appendChild(scoreDisplay);
+
+function updateScore() {
+  playerScore += 1;
+  scoreDisplay.innerHTML = `Score: ${playerScore}`;
+  console.log(`Player Score: ${playerScore}`);
+}
+
 // Helper Function: Check for Collision
 function checkCollision() {
   if (!cube) return false; // No cube to check collision with
@@ -91,6 +113,7 @@ function animate() {
     if (checkCollision()) {
       scene.remove(cube); // Remove the cube from the scene
       cube = null; // Clear the cube reference
+      updateScore();
       spawnCube(); // Spawn a new cube
     }
 
@@ -109,7 +132,9 @@ animate();
 
 // Handle window resize
 window.addEventListener('resize', () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+  const width = document.documentElement.clientWidth;
+  const height = document.documentElement.clientHeight;
+  renderer.setSize(width, height); // Adjust canvas size
+  camera.aspect = width / height; // Update camera aspect ratio
+  camera.updateProjectionMatrix(); // Update the projection matrix
 });
